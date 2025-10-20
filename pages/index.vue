@@ -32,7 +32,7 @@
       </div>
     </section>
 
-    <!-- ✨ Sección de texto animado -->
+    <!--  Sección de texto animado -->
     <section class="text-section" ref="textSection">
       <h1 ref="animatedText" class="split-text">
         La vida está llena de tantos <br/>momentos que se vuelven  <br/> eternos a tu lado...

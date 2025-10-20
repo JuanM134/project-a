@@ -229,56 +229,62 @@ onMounted(async () => {
 <style scoped>
 .page-container {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-rows: 100vh 100vh auto;
+  grid-template-areas: 
+    "envelope"
+    "text"
+    "gallery";
   background: #fdf6e3;
   min-height: 100vh;
-  position: relative;
+  overflow-x: hidden; /* Prevenir overflow horizontal */
 }
 
 .envelope-section {
-  height: 100vh;
+  grid-area: envelope;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
   overflow: hidden;
-  z-index: 10;
+  padding: 0 20px; /* Padding lateral para móvil */
+  box-sizing: border-box;
 }
 
 .gallery-section {
+  grid-area: gallery;
   width: 100%;
-  padding: 100px 20px;
+  padding: 80px 20px;
   background: #fdf6e3;
-  position: relative;
-  z-index: 1;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .text-section {
-  min-height: 100vh;
+  grid-area: text;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 100px 40px;
+  padding: 80px 20px; /* Padding reducido para móvil */
   font-family: "Satisfy", cursive;
   box-sizing: border-box;
   width: 100%;
   background: #fdf6e3;
-  position: relative;
-  z-index: 2;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .envelope-container {
   position: relative;
-  width: 370px;
+  width: 100%;
+  max-width: 370px; /* Ancho máximo */
   height: 220px;
   cursor: pointer;
   perspective: 800px;
   user-select: none;
-  z-index: 20;
+  margin: 0 auto; /* Centrado */
 }
 
 .envelope {
@@ -291,7 +297,7 @@ onMounted(async () => {
   transition: transform 1s ease;
   box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2),
     0 10px 20px rgba(0, 0, 0, 0.3);
-  z-index: 25;
+  z-index: 2;
   background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
 }
 
@@ -326,13 +332,15 @@ onMounted(async () => {
   height: fit-content;
   background: #fff;
   border-radius: 4px;
-  z-index: 15;
+  z-index: 1;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   transition: transform 1s ease;
+  max-height: 80vh; /* Limitar altura máxima en móvil */
+  overflow-y: auto; /* Scroll si es necesario */
 }
 
 .letter.focused {
-  z-index: 30;
+  z-index: 5;
   padding-top: -50%;
 }
 
@@ -344,20 +352,25 @@ onMounted(async () => {
   line-height: 1.7;
   color: #3b2f2f;
   text-align: left;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
+  gap: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .photo {
   overflow: hidden;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 .photo img {
@@ -376,7 +389,11 @@ onMounted(async () => {
   font-weight: 500;
   line-height: 1.6;
   color: #4b3b2f;
-  max-width: 90vw;
+  max-width: 100%; /* Asegurar que no exceda el ancho */
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+  word-wrap: break-word;
 }
 
 .char {
@@ -404,19 +421,85 @@ onMounted(async () => {
   transform: translateY(0);
 }
 
-/* Asegurar el orden de apilamiento correcto */
-.envelope-section {
-  position: relative;
-  z-index: 10;
+/* Responsive adjustments para móvil */
+@media (max-width: 768px) {
+  .page-container {
+    grid-template-rows: 100vh 80vh auto;
+    width: 100vw;
+    overflow-x: hidden;
+  }
+  
+  .envelope-section {
+    padding: 0 15px;
+  }
+  
+  .text-section {
+    padding: 40px 15px;
+    height: 80vh;
+  }
+  
+  .split-text {
+    font-size: 1.5rem;
+    line-height: 1.4;
+    padding: 0 5px;
+  }
+  
+  .gallery-section {
+    padding: 60px 15px;
+  }
+  
+  .gallery {
+    grid-template-columns: 1fr; /* Una columna en móvil */
+    gap: 15px;
+    padding: 0 10px;
+  }
+  
+  .envelope-container {
+    width: 90%;
+    max-width: 300px;
+    height: 180px;
+  }
+  
+  .content {
+    font-size: 1rem;
+    padding: 15px;
+    line-height: 1.5;
+  }
+  
+  .letter {
+    max-height: 70vh; /* Altura máxima reducida para móvil */
+  }
 }
 
-.text-section {
-  position: relative;
-  z-index: 5;
+/* Para pantallas muy pequeñas (menos de 400px) */
+@media (max-width: 400px) {
+  .split-text {
+    font-size: 1.3rem;
+  }
+  
+  .envelope-container {
+    max-width: 280px;
+    height: 160px;
+  }
+  
+  .content {
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+  
+  .gallery {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 }
 
-.gallery-section {
-  position: relative;
-  z-index: 1;
+/* Prevenir scroll horizontal en todos los elementos */
+* {
+  max-width: 100%;
+}
+
+section {
+  width: 100%;
+  overflow-x: hidden;
 }
 </style>

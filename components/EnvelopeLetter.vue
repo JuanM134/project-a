@@ -229,6 +229,7 @@ onMounted(async () => {
 <style scoped>
 .page-container {
   width: 100%;
+  height: fit-content;
   display: grid;
   grid-template-rows: 100vh 100vh auto;
   grid-template-areas: 
@@ -250,6 +251,7 @@ onMounted(async () => {
   overflow: hidden;
   padding: 0 20px; /* Padding lateral para móvil */
   box-sizing: border-box;
+  height: 0;
 }
 
 .gallery-section {

@@ -57,49 +57,65 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, nextTick } from 'vue';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ref, watch, onMounted, nextTick } from "vue";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// ------------------ Importaciones de imágenes ------------------
+import img1 from "@/assets/images/1.jpg";
+import img2 from "@/assets/images/2.jpg";
+import img3 from "@/assets/images/3.jpg";
+import img4 from "@/assets/images/4.jpg";
+import img5 from "@/assets/images/5.jpg";
+import img6 from "@/assets/images/6.jpg";
+import img7 from "@/assets/images/7.jpg";
+import img8 from "@/assets/images/8.jpg";
+import img9 from "@/assets/images/9.jpg";
+import img10 from "@/assets/images/10.jpg";
+import img11 from "@/assets/images/11.jpg";
+import img12 from "@/assets/images/12.jpg";
+import img13 from "@/assets/images/13.jpg";
+import img14 from "@/assets/images/14.jpg";
+import img15 from "@/assets/images/15.jpg";   
+import img16 from "@/assets/images/16.jpg";
+import img17 from "@/assets/images/17.jpg";
+import img18 from "@/assets/images/18.jpg";
+import img19 from "@/assets/images/19.jpg";
+import img20 from "@/assets/images/20.jpg";
+// ... importa todas tus demás imágenes de la misma forma
+
+// ------------------ Importación de audio ------------------
+import mainAudio from "@/assets/audio/1.mp3";
+
 gsap.registerPlugin(ScrollTrigger);
-
-// ------------------ Imports de imágenes ------------------
-import img1 from '@/assets/images/1.jpg';
-import img2 from '@/assets/images/2.jpg';
-import img3 from '@/assets/images/3.jpg';
-import img4 from '@/assets/images/4.jpg';
-import img5 from '@/assets/images/5.jpg';
-import img6 from '@/assets/images/6.jpg';
-import img7 from '@/assets/images/7.jpg';
-import img8 from '@/assets/images/8.jpg';
-import img9 from '@/assets/images/9.jpg';
-import img10 from '@/assets/images/10.jpg';
-import img11 from '@/assets/images/11.jpg';
-import img12 from '@/assets/images/12.jpg';
-import img13 from '@/assets/images/13.jpg';
-import img14 from '@/assets/images/14.jpg';
-import img15 from '@/assets/images/15.jpg';
-import img16 from '@/assets/images/16.jpg';
-import img17 from '@/assets/images/17.jpg';
-import img18 from '@/assets/images/18.jpg';
-import img19 from '@/assets/images/19.jpg';
-import img20 from '@/assets/images/20.jpg';
-
-// ------------------ Import de audio ------------------
-import mainAudio from '@/assets/audio/1.mp3';
-
-// ------------------ Datos ------------------
-const photos = ref([
-  img1, img2, img3, img4, img5, img6, img7, img8, img9, img10,
-  img11, img12, img13, img14, img15, img16, img17, img18, img19, img20
-]);
 
 const isOpen = ref(false);
 const showLetterOnly = ref(false);
-const animatedText = ref<HTMLElement | null>(null);
+const animatedText = ref<HTMLHeadingElement | null>(null);
 const photoRefs: HTMLElement[] = [];
 
-// Audio
-const audio = new Audio(mainAudio);
+const photos = ref([
+  img1,
+  img2,
+  img3,
+  img4,
+  img5,
+  img6,
+  img7,
+  img8,
+  img9,
+  img10,
+  img11,
+  img12,
+  img13,
+  img14,
+  img15,
+  img16,
+  img17,
+  img18,
+  img19,
+  img20,
+]);
 
 const handleClick = () => {
   if (!isOpen.value) {
@@ -114,13 +130,14 @@ watch(isOpen, (newVal) => {
   if (newVal) {
     gsap.to(".flap", { rotateX: 180, duration: 0.8, transformOrigin: "top" });
     gsap.to(".letter", { y: "-1%", duration: 1, delay: 0.3 });
+
     gsap.from(".content p, .content h2", {
       opacity: 0,
       y: 10,
       stagger: 0.3,
       duration: 1.2,
       delay: 1,
-      ease: "power3.out"
+      ease: "power3.out",
     });
   }
 });
@@ -134,18 +151,11 @@ watch(showLetterOnly, (newVal) => {
   }
 });
 
-// Animaciones de scroll y audio
+// === Animaciones de scroll y audio ===
 onMounted(async () => {
   await nextTick();
 
-  // Reproducir audio con delay de 20s
-  setTimeout(() => {
-    audio.play().catch(() => {
-      console.warn('No se pudo reproducir el audio automáticamente.');
-    });
-  }, 20000);
-
-  // Animación de las fotos
+  // Fotos con ScrollTrigger
   photoRefs.forEach((el, i) => {
     gsap.from(el, {
       opacity: 0,
@@ -158,21 +168,23 @@ onMounted(async () => {
         end: "bottom 30%",
         toggleActions: "play none none reverse",
       },
-      delay: i * 0.1
+      delay: i * 0.1,
     });
   });
 
-  // Animación de texto final
+  // Texto final (última sección)
   const textEl = animatedText.value;
   if (textEl) {
     const text = textEl.innerText;
     textEl.innerHTML = text
-      .split('')
-      .map(c => c === ' ' ? `<span class="char space">&nbsp;</span>` : `<span class="char">${c}</span>`)
-      .join('');
+      .split("")
+      .map((char) =>
+        char === " " ? `<span class='char space'>&nbsp;</span>` : `<span class='char'>${char}</span>`
+      )
+      .join("");
 
-    const chars = textEl.querySelectorAll('.char');
-    const textSection = document.querySelector('.text-section');
+    const chars = textEl.querySelectorAll(".char");
+    const textSection = document.querySelector(".text-section");
 
     gsap.from(chars, {
       opacity: 0,
@@ -184,11 +196,24 @@ onMounted(async () => {
         trigger: textSection,
         start: "top 50%",
         toggleActions: "play none none none",
-        markers: true, // para depuración
-        once: true
-      }
+        markers: false,
+        once: true,
+      },
     });
   }
+
+  // === Audio con delay de 20s, solo una vez ===
+  const audio = new Audio(mainAudio);
+  let audioPlayed = false;
+
+  setTimeout(() => {
+    if (!audioPlayed) {
+      audio.play().catch(() => {
+        console.warn("No se pudo reproducir el audio automáticamente.");
+      });
+      audioPlayed = true;
+    }
+  }, 20000);
 });
 </script>
 
@@ -223,7 +248,6 @@ onMounted(async () => {
   align-items: center;
   text-align: center;
   padding: 100px 40px;
-  overflow-wrap: break-word;
   font-family: "Satisfy", cursive;
   box-sizing: border-box;
   width: 100%;
@@ -247,7 +271,8 @@ onMounted(async () => {
   border-radius: 8px;
   overflow: hidden;
   transition: transform 1s ease;
-  box-shadow: inset 0 0 20px rgba(0,0,0,0.2), 0 10px 20px rgba(0,0,0,0.3);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2),
+    0 10px 20px rgba(0, 0, 0, 0.3);
   z-index: 2;
   background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
 }
@@ -284,7 +309,7 @@ onMounted(async () => {
   background: #fff;
   border-radius: 4px;
   z-index: 1;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   transition: transform 1s ease;
 }
 
@@ -314,7 +339,7 @@ onMounted(async () => {
 .photo {
   overflow: hidden;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .photo img {

@@ -148,7 +148,7 @@ watch(isOpen, (newVal) => {
 watch(showLetterOnly, (newVal) => {
   if (newVal && process.client) {
     gsap.to(".envelope", { opacity: 0, duration: 1 });
-    gsap.to(".letter", { y: "35%", duration: 1 });
+    gsap.to(".letter", { y: "5%", duration: 1 });
     gsap.to(".content", { opacity: 1, duration: 1, delay: 0.5 });
   }
 });
@@ -166,12 +166,12 @@ onMounted(async () => {
       gsap.from(el, {
         opacity: 0,
         y: 100,
-        duration: 15,
+        duration: 12,
         ease: "power3.out",
         scrollTrigger: {
           trigger: el,
-          start: "top 70%",
-          end: "bottom 30%",
+          start: "top 80%",
+          end: "bottom 20%",
           toggleActions: "play none none reverse",
         },
         delay: i * 0.1,
@@ -202,7 +202,7 @@ onMounted(async () => {
         ease: "power3.out",
         scrollTrigger: {
           trigger: textSection,
-          start: "top 50%",
+          start: "top 60%",
           toggleActions: "play none none none",
           markers: false,
           once: true,
@@ -229,64 +229,59 @@ onMounted(async () => {
 <style scoped>
 .page-container {
   width: 100%;
-  height: fit-content;
-  display: grid;
-  grid-template-rows: 100vh 100vh auto;
-  grid-template-areas: 
-    "envelope"
-    "text"
-    "gallery";
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: #fdf6e3;
   min-height: 100vh;
-  overflow-x: hidden; /* Prevenir overflow horizontal */
+  overflow-x: hidden;
 }
 
+/* Sección del sobre - altura completa de viewport */
 .envelope-section {
-  grid-area: envelope;
   width: 100%;
+  min-height: 100vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  overflow: hidden;
-  padding: 0 20px; /* Padding lateral para móvil */
+  padding: 20px;
   box-sizing: border-box;
-  height: 0;
 }
 
-.gallery-section {
-  grid-area: gallery;
-  width: 100%;
-  padding: 80px 20px;
-  background: #fdf6e3;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
+/* Sección de texto - altura completa de viewport */
 .text-section {
-  grid-area: text;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 80px 20px; /* Padding reducido para móvil */
+  padding: 40px 20px;
   font-family: "Satisfy", cursive;
   box-sizing: border-box;
-  width: 100%;
   background: #fdf6e3;
-  height: 100vh;
-  overflow: hidden;
+}
+
+/* Sección de galería - altura automática según contenido */
+.gallery-section {
+  width: 100%;
+  padding: 80px 20px;
+  background: #fdf6e3;
+  box-sizing: border-box;
 }
 
 .envelope-container {
   position: relative;
   width: 100%;
-  max-width: 370px; /* Ancho máximo */
+  max-width: 370px;
   height: 220px;
   cursor: pointer;
   perspective: 800px;
   user-select: none;
-  margin: 0 auto; /* Centrado */
+  margin: 0 auto;
 }
 
 .envelope {
@@ -332,18 +327,18 @@ onMounted(async () => {
   left: 0%;
   width: 100%;
   height: fit-content;
+  max-height: 400px;
   background: #fff;
   border-radius: 4px;
   z-index: 1;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   transition: transform 1s ease;
-  max-height: 80vh; /* Limitar altura máxima en móvil */
-  overflow-y: auto; /* Scroll si es necesario */
+  overflow-y: auto;
 }
 
 .letter.focused {
   z-index: 5;
-  padding-top: -50%;
+  transform: translateY(-50%);
 }
 
 .content {
@@ -373,6 +368,7 @@ onMounted(async () => {
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   width: 100%;
+  aspect-ratio: 1/1;
 }
 
 .photo img {
@@ -391,7 +387,7 @@ onMounted(async () => {
   font-weight: 500;
   line-height: 1.6;
   color: #4b3b2f;
-  max-width: 100%; /* Asegurar que no exceda el ancho */
+  max-width: 100%;
   width: 100%;
   padding: 0 10px;
   box-sizing: border-box;
@@ -425,25 +421,21 @@ onMounted(async () => {
 
 /* Responsive adjustments para móvil */
 @media (max-width: 768px) {
-  .page-container {
-    grid-template-rows: 100vh 80vh auto;
-    width: 100vw;
-    overflow-x: hidden;
-  }
-  
   .envelope-section {
-    padding: 0 15px;
+    min-height: 100vh;
+    height: 100vh;
+    padding: 15px;
   }
   
   .text-section {
-    padding: 40px 15px;
-    height: 80vh;
+    min-height: 100vh;
+    height: 100vh;
+    padding: 30px 15px;
   }
   
   .split-text {
     font-size: 1.5rem;
     line-height: 1.4;
-    padding: 0 5px;
   }
   
   .gallery-section {
@@ -451,9 +443,8 @@ onMounted(async () => {
   }
   
   .gallery {
-    grid-template-columns: 1fr; /* Una columna en móvil */
+    grid-template-columns: 1fr;
     gap: 15px;
-    padding: 0 10px;
   }
   
   .envelope-container {
@@ -469,7 +460,11 @@ onMounted(async () => {
   }
   
   .letter {
-    max-height: 70vh; /* Altura máxima reducida para móvil */
+    max-height: 300px;
+  }
+  
+  .letter.focused {
+    transform: translateY(-30%);
   }
 }
 
@@ -489,19 +484,28 @@ onMounted(async () => {
     padding: 12px;
   }
   
-  .gallery {
-    grid-template-columns: 1fr;
-    gap: 12px;
+  .letter {
+    max-height: 280px;
   }
 }
 
-/* Prevenir scroll horizontal en todos los elementos */
-* {
-  max-width: 100%;
+/* Asegurar que no haya superposición */
+.envelope-section,
+.text-section,
+.gallery-section {
+  position: relative;
+  z-index: 1;
 }
 
-section {
-  width: 100%;
-  overflow-x: hidden;
+.envelope-section {
+  z-index: 3;
+}
+
+.text-section {
+  z-index: 2;
+}
+
+.gallery-section {
+  z-index: 1;
 }
 </style>

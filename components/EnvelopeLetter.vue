@@ -73,18 +73,17 @@ const photoRefs = [];
 const galleryAudio = ref(null);
 const audioSrc = new URL("@/assets/audio/1.mp3", import.meta.url).href;
 
-const photos = ref([
-  new URL("@/assets/images/1.jpg", import.meta.url).href,
-  new URL("@/assets/images/2.jpg", import.meta.url).href,
-  new URL("@/assets/images/3.jpg", import.meta.url).href,
-  new URL("@/assets/images/4.jpg", import.meta.url).href,
-  new URL("@/assets/images/5.jpg", import.meta.url).href,
-  new URL("@/assets/images/6.jpg", import.meta.url).href,
-  new URL("@/assets/images/7.jpg", import.meta.url).href,
-  new URL("@/assets/images/8.jpg", import.meta.url).href,
-  new URL("@/assets/images/9.jpg", import.meta.url).href,
-  new URL("@/assets/images/10.jpg", import.meta.url).href,
-]);
+// ======== Importar todas las imágenes ========
+const imageFiles = import.meta.globEager('@/assets/images/*.jpg');
+const photos = ref(Object.values(imageFiles).map(f => f.default));
+
+// ======== Importar todos los audios ========
+const audioFiles = import.meta.globEager('@/assets/audio/*.mp3');
+const audios = {};
+for (const [key, val] of Object.entries(audioFiles)) {
+  const name = key.split('/').pop().replace('.mp3',''); // nombre del archivo sin extension
+  audios[name] = val.default;
+}
 
 const handleClick = () => {
   if (!isOpen.value) {

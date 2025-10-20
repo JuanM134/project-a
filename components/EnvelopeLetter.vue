@@ -160,7 +160,7 @@ onMounted(async () => {
     gsap.from(el, {
       opacity: 0,
       y: 100,
-      duration: 1.5,
+      duration: 15,
       ease: "power3.out",
       scrollTrigger: {
         trigger: el,
@@ -223,11 +223,12 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(135deg, #fdf6e3 0%, #f0e2c6 100%);
+  background:  #fdf6e3 ;
 }
 
 .envelope-section {
   height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -238,7 +239,7 @@ onMounted(async () => {
 .gallery-section {
   width: 100%;
   padding: 100px 20px;
-  background: linear-gradient(135deg, #fef7e6 0%, #f6e6c8 100%);
+  background:  #fdf6e3 ;
 }
 
 .text-section {
@@ -251,7 +252,8 @@ onMounted(async () => {
   font-family: "Satisfy", cursive;
   box-sizing: border-box;
   width: 100%;
-  background: linear-gradient(135deg, #fdf6e3 0%, #f0e2c6 100%);
+   background:  #fdf6e3 ;
+  height: 100vh;
 }
 
 .envelope-container {

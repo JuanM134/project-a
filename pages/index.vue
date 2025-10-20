@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <!-- 📨 Sección del sobre -->
+    <!-- Sección del sobre -->
     <section class="envelope-section">
       <div class="envelope-container" @click="handleClick">
         <!-- Sobre -->

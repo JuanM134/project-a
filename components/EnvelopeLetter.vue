@@ -71,17 +71,16 @@ const showLetterOnly = ref(false);
 const animatedText = ref(null);
 const photoRefs = [];
 const galleryAudio = ref(null);
-const audioSrc = new URL("@/assets/audio/1.mp3", import.meta.url).href;
 
-// ======== Importar todas las imágenes ========
-const imageFiles = import.meta.globEager('@/assets/images/*.jpg');
-const photos = ref(Object.values(imageFiles).map(f => f.default));
+// Importar todas las imágenes .jpg de assets/images
+const imageFiles = import.meta.globEager('/src/assets/images/*.jpg');
+const photos = Object.values(imageFiles).map(f => f.default);
 
-// ======== Importar todos los audios ========
-const audioFiles = import.meta.globEager('@/assets/audio/*.mp3');
+// Importar todos los audios .mp3 de assets/audio
+const audioFiles = import.meta.globEager('/src/assets/audio/*.mp3');
 const audios = {};
 for (const [key, val] of Object.entries(audioFiles)) {
-  const name = key.split('/').pop().replace('.mp3',''); // nombre del archivo sin extension
+  const name = key.split('/').pop().replace('.mp3', '');
   audios[name] = val.default;
 }
 

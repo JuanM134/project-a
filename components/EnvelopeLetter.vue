@@ -53,36 +53,53 @@
         </div>
       </div>
     </section>
-
-    <!-- Audio de la galería -->
-    <audio ref="galleryAudio" :src="audioSrc" preload="auto"></audio>
   </div>
 </template>
 
-<script setup>
-import { ref, watch, onMounted, nextTick } from "vue";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
+<script setup lang="ts">
+import { ref, watch, onMounted, nextTick } from 'vue';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
+
+// ------------------ Imports de imágenes ------------------
+import img1 from '@/assets/images/1.jpg';
+import img2 from '@/assets/images/2.jpg';
+import img3 from '@/assets/images/3.jpg';
+import img4 from '@/assets/images/4.jpg';
+import img5 from '@/assets/images/5.jpg';
+import img6 from '@/assets/images/6.jpg';
+import img7 from '@/assets/images/7.jpg';
+import img8 from '@/assets/images/8.jpg';
+import img9 from '@/assets/images/9.jpg';
+import img10 from '@/assets/images/10.jpg';
+import img11 from '@/assets/images/11.jpg';
+import img12 from '@/assets/images/12.jpg';
+import img13 from '@/assets/images/13.jpg';
+import img14 from '@/assets/images/14.jpg';
+import img15 from '@/assets/images/15.jpg';
+import img16 from '@/assets/images/16.jpg';
+import img17 from '@/assets/images/17.jpg';
+import img18 from '@/assets/images/18.jpg';
+import img19 from '@/assets/images/19.jpg';
+import img20 from '@/assets/images/20.jpg';
+
+// ------------------ Import de audio ------------------
+import mainAudio from '@/assets/audio/1.mp3';
+
+// ------------------ Datos ------------------
+const photos = ref([
+  img1, img2, img3, img4, img5, img6, img7, img8, img9, img10,
+  img11, img12, img13, img14, img15, img16, img17, img18, img19, img20
+]);
 
 const isOpen = ref(false);
 const showLetterOnly = ref(false);
-const animatedText = ref(null);
-const photoRefs = [];
-const galleryAudio = ref(null);
+const animatedText = ref<HTMLElement | null>(null);
+const photoRefs: HTMLElement[] = [];
 
-// Importar todas las imágenes .jpg de assets/images
-const imageFiles = import.meta.globEager('/src/assets/images/*.jpg');
-const photos = Object.values(imageFiles).map(f => f.default);
-
-// Importar todos los audios .mp3 de assets/audio
-const audioFiles = import.meta.globEager('/src/assets/audio/*.mp3');
-const audios = {};
-for (const [key, val] of Object.entries(audioFiles)) {
-  const name = key.split('/').pop().replace('.mp3', '');
-  audios[name] = val.default;
-}
+// Audio
+const audio = new Audio(mainAudio);
 
 const handleClick = () => {
   if (!isOpen.value) {
@@ -97,14 +114,13 @@ watch(isOpen, (newVal) => {
   if (newVal) {
     gsap.to(".flap", { rotateX: 180, duration: 0.8, transformOrigin: "top" });
     gsap.to(".letter", { y: "-1%", duration: 1, delay: 0.3 });
-
     gsap.from(".content p, .content h2", {
       opacity: 0,
       y: 10,
       stagger: 0.3,
       duration: 1.2,
       delay: 1,
-      ease: "power3.out",
+      ease: "power3.out"
     });
   }
 });
@@ -122,12 +138,19 @@ watch(showLetterOnly, (newVal) => {
 onMounted(async () => {
   await nextTick();
 
-  // Fotos con ScrollTrigger
+  // Reproducir audio con delay de 20s
+  setTimeout(() => {
+    audio.play().catch(() => {
+      console.warn('No se pudo reproducir el audio automáticamente.');
+    });
+  }, 20000);
+
+  // Animación de las fotos
   photoRefs.forEach((el, i) => {
     gsap.from(el, {
       opacity: 0,
       y: 100,
-      duration: 15,
+      duration: 1.5,
       ease: "power3.out",
       scrollTrigger: {
         trigger: el,
@@ -135,23 +158,21 @@ onMounted(async () => {
         end: "bottom 30%",
         toggleActions: "play none none reverse",
       },
-      delay: i * 0.1,
+      delay: i * 0.1
     });
   });
 
-  // Texto final (última sección)
+  // Animación de texto final
   const textEl = animatedText.value;
   if (textEl) {
     const text = textEl.innerText;
     textEl.innerHTML = text
-      .split("")
-      .map((char) =>
-        char === " " ? `<span class='char space'>&nbsp;</span>` : `<span class='char'>${char}</span>`
-      )
-      .join("");
+      .split('')
+      .map(c => c === ' ' ? `<span class="char space">&nbsp;</span>` : `<span class="char">${c}</span>`)
+      .join('');
 
-    const chars = textEl.querySelectorAll(".char");
-    const textSection = document.querySelector(".text-section");
+    const chars = textEl.querySelectorAll('.char');
+    const textSection = document.querySelector('.text-section');
 
     gsap.from(chars, {
       opacity: 0,
@@ -163,18 +184,10 @@ onMounted(async () => {
         trigger: textSection,
         start: "top 50%",
         toggleActions: "play none none none",
-        once: true,
-      },
+        markers: true, // para depuración
+        once: true
+      }
     });
-  }
-
-  // Reproducir audio después de 20 segundos
-  if (galleryAudio.value) {
-    setTimeout(() => {
-      galleryAudio.value.play().catch(() => {
-        console.log("Autoplay bloqueado, el usuario debe interactuar.");
-      });
-    }, 15000); // 15 segundos
   }
 });
 </script>
@@ -188,7 +201,6 @@ onMounted(async () => {
   background: linear-gradient(135deg, #fdf6e3 0%, #f0e2c6 100%);
 }
 
-/* === Secciones con gradientes crema === */
 .envelope-section {
   height: 100vh;
   display: flex;
@@ -218,7 +230,6 @@ onMounted(async () => {
   background: linear-gradient(135deg, #fdf6e3 0%, #f0e2c6 100%);
 }
 
-/* === Sobre y carta === */
 .envelope-container {
   position: relative;
   width: 370px;
@@ -236,8 +247,7 @@ onMounted(async () => {
   border-radius: 8px;
   overflow: hidden;
   transition: transform 1s ease;
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2),
-    0 10px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.2), 0 10px 20px rgba(0,0,0,0.3);
   z-index: 2;
   background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
 }
@@ -274,7 +284,7 @@ onMounted(async () => {
   background: #fff;
   border-radius: 4px;
   z-index: 1;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
   transition: transform 1s ease;
 }
 
@@ -293,7 +303,6 @@ onMounted(async () => {
   text-align: left;
 }
 
-/* === Galería === */
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -305,7 +314,7 @@ onMounted(async () => {
 .photo {
   overflow: hidden;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .photo img {
@@ -319,7 +328,6 @@ onMounted(async () => {
   transform: scale(1.1);
 }
 
-/* === Texto animado === */
 .split-text {
   font-size: 2rem;
   font-weight: 500;
@@ -338,7 +346,6 @@ onMounted(async () => {
   width: 0.4em;
 }
 
-/* === Animación carta === */
 .slide-up-enter-active,
 .slide-up-leave-active {
   transition: all 0.8s ease;
